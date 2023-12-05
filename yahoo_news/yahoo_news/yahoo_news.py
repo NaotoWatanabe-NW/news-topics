@@ -1,5 +1,6 @@
 import scrapy
 from items import YahooNewsItem
+from datetime import datetime
 
 
 class YahooNewsSpider(scrapy.Spider):
@@ -8,9 +9,9 @@ class YahooNewsSpider(scrapy.Spider):
     start_urls = ["https://news.yahoo.co.jp"]
 
     def parse(self, response):
-        categories = response.xpath("/html/body/div/header/nav/div[@id='snavi']/ul/li")
+        categories = response.xpath("/html/body/div/header/nav/div[@id='snavi']/ul[1]/li")
         for category in categories:  # トピックスごとに処理する
-            link = category
+            link = category.xpath("//a/@href").get()
             link = response.urljoin(link)
             yield scrapy.Request(link, callback=self.topic_parse)
 
@@ -18,8 +19,8 @@ class YahooNewsSpider(scrapy.Spider):
         topics = response.xpath("/html/body/div/div/main/div/div/section/div/div/div/ul/li")
         for topic in topics:
             yield YahooNewsItem(
-                title="",
-                date="",
-                site="",
-                url="",
+                title=topic.xpath("//a/text()").get(),
+                date=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
+                site="YahooNews",
+                url=topic.xpath("//a/@href").get(),
             )
