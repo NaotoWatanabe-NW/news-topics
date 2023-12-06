@@ -7,20 +7,31 @@ class YahooNewsSpiderSpider(scrapy.Spider):
     name = "yahoo_news_spider"
     allowed_domains = ["news.yahoo.co.jp"]
     start_urls = ["https://news.yahoo.co.jp"]
+    temp_url = ""
 
     def parse(self, response):
-        categories = response.xpath("/html/body/div/header/nav/div[@id='snavi']/ul[1]/li")
-        for category in categories:  # トピックスごとに処理する
-            link = category.xpath("//a/@href").get()
+        categories = response.xpath("/html/body/div/header/nav/div[@id='snavi']/ul[1]")
+        for category in categories.xpath(".//li"):  # カテゴリごとに処理する
+            link = category.xpath(".//a/@href").get()  # カテゴリのリンク
             link = response.urljoin(link)
             yield scrapy.Request(link, callback=self.topic_parse)
 
     def topic_parse(self, response):
-        topics = response.xpath("/html/body/div/div/main/div/div/section/div/div/div/ul/li")
-        for topic in topics:
-            yield NewsScrapyItem(
-                title=topic.xpath("//a/text()").get(),
-                date=datetime.today().strftime("%Y/%m/%d-%H:%M:%S"),
-                site="YahooNews",
-                url=topic.xpath("//a/@href").get(),
-            )
+        topics = response.xpath("/html/body/div/div/main/div/div/section/div/div/div/ul")
+        for topic in topics.xpath(".//li"):  # トピックごとに処理
+            url = topic.xpath(".//a/@href").get()  # トピックのリンク
+            self.temp_url = url  # リンクを保存しておく
+            yield scrapy.Request(url=url, callback=self.body_parse)
+
+    def body_parse(self, response):
+        title = response.xpath("/html/body/div/div/main/div/div/article/div/span/a/p/text()").get()  # yahooニュース
+        if title is None:
+            title = response.xpath("/html/body/div/div/main/div/div/article/header/h1/text()").get()  # yahoo以外
+        url = self.temp_url  # URL
+        date = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
+        yield NewsScrapyItem(
+            title=title,
+            date=date,
+            site="YahooNews",
+            url=url,
+        )
