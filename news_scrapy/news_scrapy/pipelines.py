@@ -6,7 +6,7 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-import datetime
+from datetime import datetime
 import os
 import sqlite3
 
@@ -17,17 +17,18 @@ class NewsScrapyPipeline(object):
     @classmethod
     def get_database(cls):
         cls._db = sqlite3.connect(
-            os.path.join(os.getcwd(), "yahoo_news_spider.db")
+            os.path.join(os.getcwd(), "yahoo_news_spider.sqlite")
         )
         cursor = cls._db.cursor()
         cursor.execute(
             'CREATE TABLE IF NOT EXISTS post(\
                 id INTEGER PRIMARY KEY AUTOINCREMENT, \
-                url TEXT UNIQUE NOT NULL, \
                 title TEXT NOT NULL, \
+                category TEXT NOT NULL, \
                 date DATE NOT NULL, \
-                site TEXT NOT NULL, \
-            );')
+                url TEXT UNIQUE NOT NULL, \
+                site TEXT NOT NULL), \
+            )')
         return cls._db
 
     def process_item(self, item, spider):
@@ -38,9 +39,10 @@ class NewsScrapyPipeline(object):
         if self.find_post(item["url"]):
             return
         db = self.get_database()
+        date = datetime.strptime(item["date"], "%Y/%m/%d-%H:%M:%S")
         db.execute(
-            'INSERT INTO post (title, url, date, site) VALUES (?, ?, ?, ?)',
-            (item["title"], item["url"], item["date"], item["site"]),
+            'INSERT INTO post (title, category, date, url, site) VALUES (?, ?, ?, ?, ?)',
+            (item["title"], item["url"], date, item["site"]),
         )
         db.commit()
 
