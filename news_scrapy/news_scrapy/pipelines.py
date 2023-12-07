@@ -27,8 +27,8 @@ class NewsScrapyPipeline(object):
                 category TEXT NOT NULL, \
                 date DATE NOT NULL, \
                 url TEXT UNIQUE NOT NULL, \
-                site TEXT NOT NULL), \
-            )')
+                site TEXT NOT NULL)'
+            )
         return cls._db
 
     def process_item(self, item, spider):
@@ -42,7 +42,7 @@ class NewsScrapyPipeline(object):
         date = datetime.strptime(item["date"], "%Y/%m/%d-%H:%M:%S")
         db.execute(
             'INSERT INTO post (title, category, date, url, site) VALUES (?, ?, ?, ?, ?)',
-            (item["title"], item["url"], date, item["site"]),
+            (item["title"], item["category"], date, item["url"], item["site"]),
         )
         db.commit()
 
