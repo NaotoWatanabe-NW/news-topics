@@ -1,0 +1,4 @@
+C:\Users\jackj\Documents\venv_django\Scripts\activate
+cd news_scrapy
+scrapy crawl yahoo_news_spider
+scrapy crawl minkabu_news_spider
