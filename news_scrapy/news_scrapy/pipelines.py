@@ -17,17 +17,17 @@ class NewsScrapyPipeline(object):
     @classmethod
     def get_database(cls):
         cls._db = sqlite3.connect(
-            os.path.join(os.getcwd(), "yahoo_news_spider.sqlite")
+            os.path.join(os.getcwd(), "article.sqlite")
         )
         cursor = cls._db.cursor()
         cursor.execute(
             'CREATE TABLE IF NOT EXISTS post(\
                 id INTEGER PRIMARY KEY AUTOINCREMENT, \
                 title TEXT NOT NULL, \
-                category TEXT NOT NULL, \
+                article TEXT NOT NULL, \
                 date DATE NOT NULL, \
-                url TEXT UNIQUE NOT NULL, \
-                site TEXT NOT NULL)'
+                site TEXT NOT NULL, \
+                url TEXT UNIQUE NOT NULL)'
             )
         return cls._db
 
@@ -41,8 +41,8 @@ class NewsScrapyPipeline(object):
         db = self.get_database()
         date = datetime.strptime(item["date"], "%Y/%m/%d-%H:%M:%S")
         db.execute(
-            'INSERT INTO post (title, category, date, url, site) VALUES (?, ?, ?, ?, ?)',
-            (item["title"], item["category"], date, item["url"], item["site"]),
+            'INSERT INTO post (title, article, date, site, url) VALUES (?, ?, ?, ?, ?)',
+            (item["title"], item["article"], date, item["date"], item["site"], item["url"]),
         )
         db.commit()
 
