@@ -26,8 +26,8 @@ class MinkabuNewsSpiderSpider(CrawlSpider):
 
     def parse_article(self, response):
         item = NewsScrapyItem()
-        item["title"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[1]/div[1]/h1/text()")
-        item["article"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]")
+        item["title"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[1]/div[1]/h1/text()").get()
+        item["article"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/text()").get()
         item["date"] = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
         item["site"] = self.site
         item["url"] = response.request.url

@@ -1,0 +1,30 @@
+Date: Mon, 11 Dec 2023 14:44:49 GMT
+Content-Type: text/html; charset=utf-8
+Server: nginx
+Vary: Accept-Encoding
+Status: 200 OK
+Cache-Control: max-age=0, private, must-revalidate
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Referrer-Policy: strict-origin-when-cross-origin
+X-Permitted-Cross-Domain-Policies: none
+X-Xss-Protection: 1; mode=block
+X-Request-Id: 829b49aa-e022-4c24-929b-9f37ca71bdb0
+X-Download-Options: noopen
+P3P: CP="UNI CUR OUR"
+Etag: W/"5f1d7e92c79c769c35ec4350a8bfb2c5"
+X-Frame-Options: SAMEORIGIN
+X-Runtime: 0.016076
+X-Content-Type-Options: nosniff
+Set-Cookie: user_id=; domain=minkabu.jp; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; secure
+Set-Cookie: nickname=; domain=minkabu.jp; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; secure
+Set-Cookie: short_nickname=; domain=minkabu.jp; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; secure
+Set-Cookie: utm_source=minkabu; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: utm_medium=pc_header; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: utm_campaign=premium; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: utm_term=; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: utm_content=; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: gclid=; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: yclid=; domain=.minkabu.jp; path=/; expires=Mon, 11 Dec 2023 15:14:49 GMT; secure; HttpOnly; SameSite=Lax
+Set-Cookie: _minkabu_production_session=cf76c43f51a916a78b5583ea246d06f3; domain=.minkabu.jp; path=/; expires=Tue, 12 Dec 2023 14:44:49 GMT; secure; HttpOnly; SameSite=Lax
+X-Powered-By: Phusion Passenger 6.0.7
+Content-Encoding: gzip

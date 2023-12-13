@@ -9,27 +9,16 @@ from itemadapter import ItemAdapter
 from datetime import datetime
 import os
 import sqlite3
+from pymongo.mongo_client import MongoClient
 
 
 class NewsScrapyPipeline(object):
-    _db = None
+    _client = None
 
     @classmethod
     def get_database(cls):
-        cls._db = sqlite3.connect(
-            os.path.join(os.getcwd(), "article.sqlite")
-        )
-        cursor = cls._db.cursor()
-        cursor.execute(
-            'CREATE TABLE IF NOT EXISTS post(\
-                id INTEGER PRIMARY KEY AUTOINCREMENT, \
-                title TEXT NOT NULL, \
-                article TEXT NOT NULL, \
-                date DATE NOT NULL, \
-                site TEXT NOT NULL, \
-                url TEXT UNIQUE NOT NULL)'
-            )
-        return cls._db
+        cls._client = NewsClient()
+        return cls._client
 
     def process_item(self, item, spider):
         self.save_post(item)
@@ -39,17 +28,29 @@ class NewsScrapyPipeline(object):
         if self.find_post(item["url"]):
             return
         db = self.get_database()
-        date = datetime.strptime(item["date"], "%Y/%m/%d-%H:%M:%S")
-        db.execute(
-            'INSERT INTO post (title, article, date, site, url) VALUES (?, ?, ?, ?, ?)',
-            (item["title"], item["article"], date, item["date"], item["site"], item["url"]),
-        )
-        db.commit()
+        db.add(item)
 
     def find_post(self, url):
-        db = self.get_database()
-        cursor = db.execute(
-            "SELECT * FROM post WHERE url=?",
-            (url,)
-        )
-        return cursor.fetchall()
+        post = self._client.collection.find_one({"url": url})
+        if post is None:
+            return True
+        else:
+            return False
+
+
+class NewsClient:
+    client = None
+    db = None
+    collection = None
+
+    def __init__(self):
+        self.client = MongoClient("mongodb+srv://NaotoWatanabe:jack0719@cluster0.dr5vnlh.mongodb.net/?retryWrites"
+                                  "=true&w=majority")
+        self.db = self.client["Cluster0"]
+        self.collection = self.db["NewsStorage"]
+
+    def add(self, item):
+        item["date"] = datetime.now()
+        self.collection.insert_one(item)
+
+
