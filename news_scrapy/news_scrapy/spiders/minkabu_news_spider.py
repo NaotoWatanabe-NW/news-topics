@@ -31,7 +31,9 @@ class MinkabuNewsSpiderSpider(scrapy.Spider):
     def parse_article(self, response):
         logger.info("Parse function called on %s", response.url)
         title = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[1]/div[1]/h1/text()").get()
-        article = "".join(response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/text()").getall())
+        article = "".join(response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/text()").getall()).replace("\n", "").replace(" ", "")
+        if article == "":
+            article = "".join(response.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div/div/p").getall()).replace("\n", "").replace(" ", "")
         date = datetime.today()
         url = response.request.url
         yield NewsScrapyItem(

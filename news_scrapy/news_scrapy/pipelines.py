@@ -22,16 +22,8 @@ class NewsScrapyPipeline(object):
         self._client.close()
 
     def process_item(self, item, spider):
-        self.save_post(item)
+        self._client.add(item)
         return item
-
-    def save_post(self, item):
-        if self.find_post(item["url"]) is False:
-            self._client.add(item)
-
-    def find_post(self, url):
-        post = self._client.collection.find_one({"url": url})
-        return post is None
 
 
 class NewsClient:

@@ -34,7 +34,7 @@ class YahooNewsSpiderSpider(scrapy.Spider):
             link = response.xpath("/html/body/div/div/main/div/div/article/div[2]/div/p/a/@href").get()
             yield scrapy.Request(url=link, callback=self.body_parse)
         else:
-            article = "".join(response.xpath("/html/body/div/div/main/div/div/article/div/div/p/text()").getall())
+            article = "".join(response.xpath("/html/body/div/div/main/div/div/article/div/div/p/text()").getall()).replace("\n", "").replace(" ", "")
             date = datetime.today()
             url = response.request.url
             yield NewsScrapyItem(
