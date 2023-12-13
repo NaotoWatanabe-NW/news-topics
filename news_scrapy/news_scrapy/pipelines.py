@@ -15,42 +15,35 @@ from pymongo.mongo_client import MongoClient
 class NewsScrapyPipeline(object):
     _client = None
 
-    @classmethod
-    def get_database(cls):
-        cls._client = NewsClient()
-        return cls._client
+    def open_spider(self, spider):
+        self._client = NewsClient()
+
+    def close_spider(self, spider):
+        self._client.close()
 
     def process_item(self, item, spider):
         self.save_post(item)
         return item
 
     def save_post(self, item):
-        if self.find_post(item["url"]):
-            return
-        db = self.get_database()
-        db.add(item)
+        if self.find_post(item["url"]) is False:
+            self._client.add(item)
 
     def find_post(self, url):
         post = self._client.collection.find_one({"url": url})
-        if post is None:
-            return True
-        else:
-            return False
+        return post is None
 
 
 class NewsClient:
-    client = None
-    db = None
-    collection = None
-
     def __init__(self):
         self.client = MongoClient("mongodb+srv://NaotoWatanabe:jack0719@cluster0.dr5vnlh.mongodb.net/?retryWrites"
                                   "=true&w=majority")
-        self.db = self.client["Cluster0"]
-        self.collection = self.db["NewsStorage"]
+        self.db = self.client["NewsStorage"]
+        d = datetime.today().strftime("%Y-%m")
+        self.collection = self.db[f"{d}"]
 
     def add(self, item):
-        item["date"] = datetime.now()
         self.collection.insert_one(item)
 
-
+    def close(self):
+        self.client.close()

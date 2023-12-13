@@ -1,10 +1,11 @@
 from ..items import NewsScrapyItem
-from scrapy.spiders import CrawlSpider, Rule
-from scrapy.linkextractors import LinkExtractor
+import scrapy
 from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 
-class MinkabuNewsSpiderSpider(CrawlSpider):
+class MinkabuNewsSpiderSpider(scrapy.Spider):
     name = "minkabu_news_spider"
     allowed_domains = ["minkabu.jp"]
     start_urls = [
@@ -17,18 +18,26 @@ class MinkabuNewsSpiderSpider(CrawlSpider):
         "https://minkabu.jp/news/search?category=product",
         "https://minkabu.jp/news/search?category=tatsujin",
         "https://minkabu.jp/news/search?category=column",
-        "https://minkabu.jp/news/search?category=yutai",
-                  ]
+        ]
     site = "Minkabu"
-    rules = (
-        Rule(LinkExtractor(allow=r"/news/*"), callback="parse_article"),
-    )
+
+    def parse(self, response):
+        logger.info("Parse function called on %s", response.url)
+        topics = response.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div/ul/li/div/div[1]/div/a/@href").getall()
+        for topic in topics:
+            link = response.urljoin(topic)
+            yield scrapy.Request(link, callback=self.parse_article)
 
     def parse_article(self, response):
-        item = NewsScrapyItem()
-        item["title"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[1]/div[1]/h1/text()").get()
-        item["article"] = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/text()").get()
-        item["date"] = datetime.today().strftime("%Y/%m/%d-%H:%M:%S")
-        item["site"] = self.site
-        item["url"] = response.request.url
-        return item
+        logger.info("Parse function called on %s", response.url)
+        title = response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[1]/div[1]/h1/text()").get()
+        article = "".join(response.xpath("/html/body/div/div[2]/div/div/div[1]/div[1]/div/div/div[1]/div[2]/text()").getall())
+        date = datetime.today()
+        url = response.request.url
+        yield NewsScrapyItem(
+            title=title,
+            article=article,
+            date=date,
+            site=self.site,
+            url=url,
+        )
