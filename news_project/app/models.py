@@ -1,5 +1,6 @@
 from django.db import models
 from django.core import validators
+# from djongo import models
 
 
 class Item(models.Model):
@@ -40,7 +41,7 @@ class Article(models.Model):
     _id = models.TextField()
     site = models.CharField(
         verbose_name="NewsSite",
-        max_length=300,
+        max_length=200,
     )
     title = models.CharField(
         verbose_name="News Title",

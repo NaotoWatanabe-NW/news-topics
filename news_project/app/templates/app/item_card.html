@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-3">
+        <p>Name</p>
+    </div>
+    <div class="col-9">
+        <p>{{ item.name }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <p>Age</p>
+    </div>
+    <div class="col-9">
+        <p>{{ item.age }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <p>Sex</p>
+    </div>
+    <div class="col-9">
+        <p>{{ item.get_sex_display }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <p>Memo</p>
+    </div>
+    <div class="col-9">
+        <p>{{ item.memo|linebreaksbr }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <p>Register Date</p>
+    </div>
+    <div class="col-9">
+        <p>{{ item.created_at|date:"Y/m/d G:i:s" }}</p>
+    </div>
+</div>

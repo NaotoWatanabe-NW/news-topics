@@ -1,0 +1,29 @@
+{% extends "./_base.html" %}
+<!-- -->
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Delete Data</h2>
+    <p>Do you delete this Data?</p>
+
+    <form action="" method="post">
+        {% csrf_token %>
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right">
+                    <a class="btn btn-outline-secondary" href="{% url 'index' %}">Back</a>
+                    <input type="submit" class="btn btn-outline-secondary" value="Delete"/>
+                </div>
+            </div>
+        </div>
+        {% include "./item_card.html" %}
+        <div class="row">
+            <div class="col-12">
+                <div class="float-right">
+                    <a class="btn btn-outline-secondary" href="{% url 'index' %}">Back</a>
+                    <input type="submit" class="btn btn-outline-secondary" value="Delete">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

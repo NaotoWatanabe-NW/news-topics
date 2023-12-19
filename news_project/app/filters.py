@@ -35,4 +35,4 @@ class ArticleFilter(FilterSet):
     class Meta:
 
         model = Article
-        fields = ("title", "article", "url")
+        fields = ("title", "article", "url", "site")

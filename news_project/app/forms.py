@@ -8,7 +8,7 @@ class ItemForm(forms.ModelForm):
         model = Item
         field = {"name", "age", "sex", "memo"}
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "記入例: 山田太郎"}),
+            "name": forms.TextInput(attrs={"placeholder": "記入例: "}),
             "age": forms.NumberInput(attrs={"min": 1}),
             "sex": forms.RadioSelect(),
             "memo": forms.Textarea(attrs={"rows": 4})
@@ -21,9 +21,9 @@ class ArticleForm(forms.ModelForm):
         model = Article
         field = {"site", "title", "article", "stored_at", "url"}
         widgets = {
-            "site": forms.Textarea,
-            "title": forms.Textarea(),
-            "article": forms.Textarea(),
-            "stored_at": forms.DateTimeField(),
+            "site": forms.Textarea(attrs={"cols": 80, "rows": 5}),
+            "title": forms.Textarea(attrs={"cols": 80, "rows": 5}),
+            "article": forms.Textarea(attrs={"cols": 80, "rows": 20}),
+            "stored_at": forms.DateTimeField(attrs={}),
             "url": forms.CharField(),
         }
