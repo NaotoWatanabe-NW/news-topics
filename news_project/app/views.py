@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django_filters.views import FilterView
 
@@ -46,3 +46,25 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
 class ItemDeleteView(LoginRequiredMixin, DeleteView):
     model = Item
     success_url = reverse_lazy("index")
+
+
+class ArticleFilterView(LoginRequiredMixin, FilterView):
+    model = Article
+    filterset_class = ArticleFilter
+    queryset = Article.objects.all().order_by("-created_at")
+    strict = False
+    paginate_by = 10
+
+    def get(self, request, **kwargs):
+        if request.GET:
+            request.session["query"] = request.GET
+        else:
+            request.GET = request.GET.copy()
+            if "query!" in request.session.keys():
+                for key in request.session["query"].keys():
+                    request.GET[key] = request.session["query"][key]
+        return super().get(request, **kwargs)
+
+
+class ArticleDetailView(LoginRequiredMixin, DetailView):
+    model = Article

@@ -4,7 +4,7 @@ from django.core import validators
 
 
 class Item(models.Model):
-    SEX_CHOISE = ((1, "Male"), (2, "Female"))
+    SEX_CHOICE = ((1, "Male"), (2, "Female"))
     name = models.CharField(
         verbose_name="Name",
         max_length=200,
@@ -17,7 +17,7 @@ class Item(models.Model):
     )
     sex = models.IntegerField(
         verbose_name="Sex",
-        choices=SEX_CHOISE,
+        choices=SEX_CHOICE,
         default=1
     )
     memo = models.TextField(

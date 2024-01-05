@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class MinkabuNewsSpiderSpider(scrapy.Spider):
     name = "minkabu_news_spider"
     allowed_domains = ["minkabu.jp"]
@@ -24,6 +25,7 @@ class MinkabuNewsSpiderSpider(scrapy.Spider):
     def parse(self, response):
         logger.info("Parse function called on %s", response.url)
         topics = response.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div/ul/li/div/div[1]/div/a/@href").getall()
+        # topics = response.xpath("/html/body/div/div[2]/div/div/div/div/div/div/div[3]/div/ul/li/a/@href").getall()
         for topic in topics:
             link = response.urljoin(topic)
             yield scrapy.Request(link, callback=self.parse_article)
